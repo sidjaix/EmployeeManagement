@@ -1,0 +1,34 @@
+﻿@model Employee
+
+@{
+  ViewBag.Title = "Employee Detail";
+}
+
+<div class="row justify-content-center m-3">
+  <div class="col-sm-4">
+    <div class="card">
+      <div class="card-header">
+        <h1>@Model.Name</h1>
+      </div>
+
+      <div class="card-body text-center">
+        <img src="~/images/Insta.jpg" class="card-img-top" alt="Alternate Text" />
+
+        <h4>Employee ID: @Model.Id</h4>
+        <h4>Email-Id: @Model.Email</h4>
+        <h4>Department: @Model.Department</h4>
+      </div>
+
+      <div class="card-footer text-center">
+        <a asp-controller="home" asp-action="index" class="btn btn-primary">Back</a>
+        <a href="#" class="btn btn-primary">Edit</a>
+        <a href="#" class="btn btn-danger">Delete</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+@section Scripts{
+  <script src="~/js/CustomJavaScript.js"></script>
+}
