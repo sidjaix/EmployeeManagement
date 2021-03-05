@@ -34,9 +34,9 @@ namespace EmployeeManagement.Controllers
     [AllowAnonymous]
     public async Task<IActionResult> Register(RegisterViewModel model)
     {
-      if(ModelState.IsValid)
+      if (ModelState.IsValid)
       {
-        var user = new IdentityUser { UserName=model.Email, Email=model.Email };
+        var user = new IdentityUser { UserName = model.Email, Email = model.Email };
         var result = await userManager.CreateAsync(user, model.Password);
 
         if (result.Succeeded)
@@ -63,7 +63,7 @@ namespace EmployeeManagement.Controllers
     }
     [HttpPost]
     [AllowAnonymous]
-    public async Task<IActionResult> Login(LoginViewModel model)
+    public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
     {
       if (ModelState.IsValid)
       {
@@ -71,10 +71,17 @@ namespace EmployeeManagement.Controllers
 
         if (result.Succeeded)
         {
-          return RedirectToAction("Index", "home");
+          if (!string.IsNullOrEmpty(returnUrl))
+          {
+            // Open redirect vulnerability
+            return LocalRedirect(returnUrl);
+          }
+          else
+          {
+            return RedirectToAction("Index", "home");
+          }
         }
-
-          ModelState.AddModelError(string.Empty, "Invalid Username or Password");
+        ModelState.AddModelError(string.Empty, "Invalid Username or Password");
       }
 
       return View(model);
