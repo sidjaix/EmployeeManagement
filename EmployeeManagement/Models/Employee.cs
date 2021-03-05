@@ -12,6 +12,5 @@ namespace EmployeeManagement.Models
     public string Email { get; set; }
     [Required]
     public Dept? Department { get; set; }
-        public EntityState State { get; internal set; }
     }
 }
