@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using EmployeeManagement.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +19,7 @@ namespace EmployeeManagement
 {
   public class Startup
   {
-    private IConfiguration _config;
+    private readonly IConfiguration _config;
 
     public Startup(IConfiguration config)
     {
@@ -31,11 +34,18 @@ namespace EmployeeManagement
 
       services.AddDbContextPool<AppDbContext>(
           options => options.UseSqlServer(_config.GetConnectionString("EmployeeDBConnection")));
-      services.AddIdentity<IdentityUser, IdentityRole>(options=>
+      services.AddIdentity<IdentityUser, IdentityRole>(options =>
       {
         options.Password.RequireUppercase = false;
       }).AddEntityFrameworkStores<AppDbContext>();
-      services.AddMvc(options => options.EnableEndpointRouting = false);
+      services.AddMvc(options =>
+      {
+        options.EnableEndpointRouting = false;
+        var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+        options.Filters.Add(new AuthorizeFilter(policy));
+      });
       //services.AddSingleton<IEmployeeRepository, MockEmployeeRepository>();
       services.AddScoped<IEmployeeRepository, SqlEmployeeRepository>();
     }

@@ -1,9 +1,7 @@
 ﻿using EmployeeManagement.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace EmployeeManagement.Controllers
@@ -27,11 +25,13 @@ namespace EmployeeManagement.Controllers
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public IActionResult Register()
     {
       return View();
     }
     [HttpPost]
+    [AllowAnonymous]
     public async Task<IActionResult> Register(RegisterViewModel model)
     {
       if(ModelState.IsValid)
@@ -56,11 +56,13 @@ namespace EmployeeManagement.Controllers
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public IActionResult Login()
     {
       return View();
     }
     [HttpPost]
+    [AllowAnonymous]
     public async Task<IActionResult> Login(LoginViewModel model)
     {
       if (ModelState.IsValid)

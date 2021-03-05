@@ -1,8 +1,10 @@
 ﻿using EmployeeManagement.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeManagement.Controllers
 {
+  [Authorize]
   public class HomeController : Controller
   {
     private readonly IEmployeeRepository _employeeRespository;
@@ -10,18 +12,21 @@ namespace EmployeeManagement.Controllers
     {
       _employeeRespository = employeeRepository;
     }
+    [AllowAnonymous]
     public IActionResult Index()
     {
       var employees = _employeeRespository.GetAllEmployee();
       return View(employees);
     }
 
+    [AllowAnonymous]
     public IActionResult Detail(int? id)
     {
       Employee employee = _employeeRespository.GetEmployeeById(id ?? 1);
       return View(employee);
     }
 
+    [HttpGet]
     public ViewResult Create()
     {
       return View();
